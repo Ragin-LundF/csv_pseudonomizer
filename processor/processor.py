@@ -36,5 +36,5 @@ def process_file(files):
             for line in csv_output:
                 total_processed_out += 1
                 progress_bar_out.update(total_processed_out - progress_bar_out.n)
-                fp.write(f"{line}")
+                fp.write(f"{line}\n")
     fp.close()

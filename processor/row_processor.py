@@ -1,19 +1,18 @@
+import importlib
+
 import config
-import pseudonomizer
 
 
 def process_row(fake, row):
     term = row.decode("utf-8").split(config.csv_separator)
-    term[0] = "1"
-    term[1] = "2"
-    term[2] = "3"
 
-    # todo
-    for pseudo_element in config.pseudo:
-        pseudo_config = pseudo_element.get()
-        idx_to_modify = get_column_id(pseudo_config[0])
-        method = getattr(pseudonomizer, pseudo_config[1])
-        term[idx_to_modify] = method(fake, term[idx_to_modify])
+    if term[0] != config.csv_headers[0]:
+        for pseudo_element in config.pseudo:
+            idx_to_modify = get_column_id(pseudo_element.get('name'))
+            module = importlib.import_module(pseudo_element.get('import'))
+            method_to_call = getattr(module, pseudo_element.get('function'))
+
+            term[idx_to_modify] = method_to_call(fake, term[idx_to_modify])
     return ",".join(term)
 
 

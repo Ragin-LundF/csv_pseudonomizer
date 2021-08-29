@@ -1,4 +1,5 @@
 import getopt
+import os
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
@@ -25,6 +26,9 @@ def main():
             generate_dummy_data()
 
     if should_process:
+        if os.path.isfile(output_file):
+            os.remove(output_file)
+
         files = [(input_file, output_file)]
         with ThreadPoolExecutor() as executor:
             from processor.processor import process_file
