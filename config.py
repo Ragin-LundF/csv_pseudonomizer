@@ -1,8 +1,13 @@
 # Processor
+# -- Separator for the CSV file
 csv_separator = ","
+# -- Headers of the target CSV file. This is also used for the dummy file.
 csv_headers = ["counterpartName", "counterpartIBAN", "counterpartAccountNo", "counterpartBIC", "accountNo",
                "purposeLine", "amount"]
+# -- Locale for the data (impacts the locale of the Fake library)
 fake_locale = "de_DE"
+
+# -- configuration for the pseudonomization
 pseudo = [
     {
         "name": "counterpartName",
