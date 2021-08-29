@@ -5,8 +5,9 @@ from contextlib import closing
 from faker import Faker
 from tqdm import tqdm
 
-number_of_threads = 4
-records = 52_000_000
+# the amount of data will be records/number_of_threads...
+number_of_threads = 6
+records = 10_000_000
 csv_file_name = "dummy.csv"
 csv_headers = ["counterpartName", "counterpartIBAN", "counterpartAccountNo", "counterpartBIC", "accountNo",
                "purposeLine", "amount"]
