@@ -1,11 +1,15 @@
 import mmap
 from pathlib import Path
+
+from faker import Faker
 from tqdm import tqdm
 
-from row_processor import process_row
+import config
+from processor.row_processor import process_row
 
 
 def process_file(files):
+    fake = Faker(config.fake_locale)
     input_file = files[0]
     output_file = files[1]
     csv_output = []
@@ -21,7 +25,7 @@ def process_file(files):
             mm = mmap.mmap(fp.fileno(), 0)
             # iterate over the block, until next newline
             for line in iter(mm.readline, b""):
-                csv_output.append(process_row(line.strip()))
+                csv_output.append(process_row(fake, line.strip()))
                 total_processed_in += len(line)
                 progress_bar_in.update(total_processed_in - progress_bar_in.n)
             mm.close()

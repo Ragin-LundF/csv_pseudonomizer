@@ -9,3 +9,7 @@ csv_file_name = "dummy.csv"
 csv_headers = ["counterpartName", "counterpartIBAN", "counterpartAccountNo", "counterpartBIC", "accountNo",
                "purposeLine", "amount"]
 fake_locale = "de_DE"
+
+pseudo = [
+    {"counterpartName": "pseudonomize_name"}
+]
