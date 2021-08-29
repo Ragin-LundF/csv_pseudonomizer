@@ -4,11 +4,24 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 
 
+def help():
+    print("main.py -i <inputfile> -o <outputfile> -d")
+    print("  -i <inputfile> | --input=<inputfile>")
+    print("     Define the input file")
+    print("  -o <outputfile> | --output=<outputfile>")
+    print("     Define the output file")
+    print("  -d | --dummy")
+    print("     Create dummy file for testing")
+
+
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "di:o:", ["dummy", "input=", "output="])
+        if len(opts) == 0:
+            help()
+            sys.exit(2)
     except getopt.GetoptError:
-        print("main.py -i <inputfile> -o <outputfile> -d <true|false>")
+        help()
         sys.exit(2)
 
     input_file = ""
