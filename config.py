@@ -8,6 +8,11 @@ pseudo = [
         "name": "counterpartName",
         "import": "pseudonomizer.pseudo_names",
         "function": "pseudonomize_name"
+    },
+    {
+        "name": "counterpartIBAN",
+        "import": "pseudonomizer.pseudo_iban",
+        "function": "pseudonomize_iban"
     }
 ]
 
