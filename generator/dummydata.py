@@ -1,6 +1,7 @@
 import csv
 
 from faker import Faker
+from tqdm import tqdm
 
 
 def generate_dummy_data():
@@ -13,7 +14,7 @@ def generate_dummy_data():
     with open(file_name, 'wt') as csvFile:
         writer = csv.DictWriter(csvFile, fieldnames=headers)
         writer.writeheader()
-        for i in range(records):
+        for i in tqdm(range(records)):
             writer.writerow({
                 "counterpartName": counterpart_name(fake),
                 "counterpartIBAN": fake.iban(),
