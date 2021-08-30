@@ -34,7 +34,7 @@ def generate_dummy_data():
         print("Create data (progress per thread)...")
         joined_csv_rows = pool.imap_unordered(join_csv_rows, range(config.generator_number_of_threads))
 
-        with open(config.generator_csv_file_name, 'wt') as csvFile:
+        with open(config.generator_csv_file_name, 'wt', encoding='utf-8', newline='') as csvFile:
             writer = csv.DictWriter(csvFile, fieldnames=config.csv_headers)
             writer.writeheader()
             for row_list in joined_csv_rows:

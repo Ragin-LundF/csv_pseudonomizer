@@ -18,7 +18,7 @@ def process_file(files):
     total_processed_out = 0
     print(f"Processing {input_file}")
 
-    with open(input_file, "r+b") as fp:
+    with open(input_file, 'r+b') as fp:
         # use a progress bar
         with tqdm(total=fsize, desc=f"processing {input_file} (bytes)") as progress_bar_in:
             # map the entire file into memory, normally much faster than buffered i/o
@@ -31,7 +31,7 @@ def process_file(files):
             mm.close()
     fp.close()
 
-    with open(output_file, "a+") as fp:
+    with open(output_file, 'a+', encoding='utf-8', newline='') as fp:
         with tqdm(total=len(csv_output), desc=f"writing {output_file} (lines)") as progress_bar_out:
             for line in csv_output:
                 total_processed_out += 1
