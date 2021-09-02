@@ -1,6 +1,10 @@
 # Processor
 # -- Separator for the CSV file
 csv_separator = ","
+# -- Defines leading characters, which should be removed from the columns
+csv_remove_leading = "\""
+# -- Defines trailing characters, which should be removed from the columns
+csv_remove_trailing = "\""
 # -- Headers of the target CSV file. This is also used for the dummy file.
 csv_headers = ["counterpartName", "counterpartIBAN", "counterpartAccountNo", "counterpartBIC", "accountNo",
                "purposeLine", "amount"]
