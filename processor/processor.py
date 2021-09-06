@@ -7,6 +7,7 @@ from tqdm import tqdm
 import config
 from processor.row_processor import process_row
 from pseudonomizer.global_dict import save_dataframe, load_dataframe
+from utils.file_utils import save_list_of_lines
 
 
 def process_file(files: list[str]):
@@ -21,31 +22,30 @@ def process_file(files: list[str]):
     if config.save_mapping:
         load_dataframe()
 
-    with open(input_file, 'r+b', encoding=config.csv_encoding) as fp:
+    with open(input_file, 'r+b') as fp:
         # use a progress bar
         with tqdm(total=file_size, desc=f"processing {input_file} (bytes)") as progress_bar_in:
             # map the entire file into memory, normally much faster than buffered i/o
             mm = mmap.mmap(fp.fileno(), 0)
             # iterate over the block, until next newline
             for line in iter(mm.readline, b""):
-                csv_output.append(process_row(fake, line.strip()))
+                try:
+                    csv_output.append(process_row(fake, line.strip()))
+                except ModuleNotFoundError as mnfe:
+                    print("The specified module for pseudonomization in the config.py was not found. Error: ", mnfe)
+                    break
+                except AttributeError as attrex:
+                    print("The specified method for pseudonomization in config.py was not found. Error: ", attrex)
+                    break
+                except BaseException as base:
+                    print("Error while processing files: ", base)
+                    break
                 total_processed_in += len(line)
                 progress_bar_in.update(total_processed_in - progress_bar_in.n)
             mm.close()
     fp.close()
 
-    save_result(output_file, csv_output)
+    save_list_of_lines(output_file, csv_output, mode='a+')
 
     if config.save_mapping:
         save_dataframe()
-
-
-def save_result(output_file: str, csv_output: list[str]):
-    total_processed_out = 0
-    with open(output_file, 'a+', encoding=config.csv_encoding, newline='') as fp:
-        with tqdm(total=len(csv_output), desc=f"writing {output_file} (lines)") as progress_bar_out:
-            for line in csv_output:
-                total_processed_out += 1
-                progress_bar_out.update(total_processed_out - progress_bar_out.n)
-                fp.write(f"{line}\n")
-    fp.close()

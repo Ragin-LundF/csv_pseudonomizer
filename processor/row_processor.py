@@ -5,8 +5,8 @@ from faker import Faker
 import config
 
 
-def process_row(fake: Faker, row: str):
-    term = row.decode("utf-8").split(config.csv_separator)
+def process_row(fake: Faker, row):
+    term = row.decode(config.csv_encoding).split(config.csv_separator)
     term = remove_leading_and_trailing_chars(term)
 
     if term[0] != config.csv_headers[0]:

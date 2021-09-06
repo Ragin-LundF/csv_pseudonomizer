@@ -25,6 +25,8 @@ To configure the tool, please have a look at [config.py](config.py).
 | `--split=` | | `--split=5000` |
 | `-o` | Specify the output file for processing | `-o dummy_processed.csv` |
 | `--outputfile=` | | `--outputfile=dummy_processed.csv` |
+| `--gen_firstnames` | Generates a new list of firstnames in the `pseudonominizer/rules/firstnames.txt` file, depending on the locale in `config.py`. | `--gen_firstnames` |
+| `--gen_lastnames` | Generates a new list of lastnames in the `pseudonominizer/rules/lastnames.txt` file, depending on the locale in `config.py`. | `--gen_lastnames` |
 
 ### Create a dummy file for testing
 
@@ -67,3 +69,14 @@ Example:
 python main.py -i=dummy.csv -o=dummy_processed.csv
 ```
 
+### Generate new name lists
+
+Firstnames:
+```bash
+python main.py --gen-firstnames
+```
+
+Lastnames:
+```bash
+python main.py --gen-lastnames
+```

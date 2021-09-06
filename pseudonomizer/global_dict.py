@@ -8,7 +8,7 @@ import pyarrow.parquet as pq
 import config
 
 ReplaceObj = make_dataclass("ReplaceObj", [("original", str), ("replaced", str)])
-global_replace_dict = pandas.DataFrame([ReplaceObj("", "")])
+global_replace_dict = pandas.DataFrame([ReplaceObj(None, None)])
 
 
 def get_element(element):
