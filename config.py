@@ -11,6 +11,11 @@ csv_headers = ["counterpartName", "counterpartIBAN", "counterpartAccountNo", "co
 # -- Locale for the data (impacts the locale of the Fake library)
 fake_locale = "de_DE"
 
+# -- Save the mapping as parquet file and reuse the existing one
+save_mapping = True
+# -- Mapping file name
+mapping_file_name = "mapping.parquet"
+
 # -- configuration for the pseudonomization
 pseudo = [
     {

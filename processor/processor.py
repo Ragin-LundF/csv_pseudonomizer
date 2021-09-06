@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 import config
 from processor.row_processor import process_row
+from pseudonomizer.global_dict import save_dataframe, load_dataframe
 
 
 def process_file(files):
@@ -13,14 +14,17 @@ def process_file(files):
     input_file = files[0]
     output_file = files[1]
     csv_output = []
-    fsize = Path(input_file).stat().st_size
+    file_size = Path(input_file).stat().st_size
     total_processed_in = 0
     total_processed_out = 0
     print(f"Processing {input_file}")
 
+    if config.save_mapping:
+        load_dataframe()
+
     with open(input_file, 'r+b') as fp:
         # use a progress bar
-        with tqdm(total=fsize, desc=f"processing {input_file} (bytes)") as progress_bar_in:
+        with tqdm(total=file_size, desc=f"processing {input_file} (bytes)") as progress_bar_in:
             # map the entire file into memory, normally much faster than buffered i/o
             mm = mmap.mmap(fp.fileno(), 0)
             # iterate over the block, until next newline
@@ -38,3 +42,6 @@ def process_file(files):
                 progress_bar_out.update(total_processed_out - progress_bar_out.n)
                 fp.write(f"{line}\n")
     fp.close()
+
+    if config.save_mapping:
+        save_dataframe()
