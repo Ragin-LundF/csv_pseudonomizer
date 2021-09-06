@@ -16,7 +16,6 @@ def process_file(files):
     csv_output = []
     file_size = Path(input_file).stat().st_size
     total_processed_in = 0
-    total_processed_out = 0
     print(f"Processing {input_file}")
 
     if config.save_mapping:
@@ -35,6 +34,14 @@ def process_file(files):
             mm.close()
     fp.close()
 
+    save_result(output_file, csv_output)
+
+    if config.save_mapping:
+        save_dataframe()
+
+
+def save_result(output_file, csv_output):
+    total_processed_out = 0
     with open(output_file, 'a+', encoding='utf-8', newline='') as fp:
         with tqdm(total=len(csv_output), desc=f"writing {output_file} (lines)") as progress_bar_out:
             for line in csv_output:
@@ -42,6 +49,3 @@ def process_file(files):
                 progress_bar_out.update(total_processed_out - progress_bar_out.n)
                 fp.write(f"{line}\n")
     fp.close()
-
-    if config.save_mapping:
-        save_dataframe()
