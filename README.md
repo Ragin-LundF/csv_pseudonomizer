@@ -22,7 +22,7 @@ To configure the tool, please have a look at [config.py](config.py).
 | `-i` | Specify the input file for processing | `-i dummy.csv` |
 | `--inputfile=` | | `--inputfile=dummy.csv` |
 | `-s` | Split CSV file into new files. This option defines the wanted output line amount. | `-s 5000` |
-| `--inputfile=` | | `--inputfile=dummy.csv` |
+| `--split=` | | `--split=5000` |
 | `-o` | Specify the output file for processing | `-o dummy_processed.csv` |
 | `--outputfile=` | | `--outputfile=dummy_processed.csv` |
 
