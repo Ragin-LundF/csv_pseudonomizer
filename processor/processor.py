@@ -9,7 +9,7 @@ from processor.row_processor import process_row
 from pseudonomizer.global_dict import save_dataframe, load_dataframe
 
 
-def process_file(files):
+def process_file(files: list[str]):
     fake = Faker(config.fake_locale)
     input_file = files[0]
     output_file = files[1]
@@ -21,7 +21,7 @@ def process_file(files):
     if config.save_mapping:
         load_dataframe()
 
-    with open(input_file, 'r+b') as fp:
+    with open(input_file, 'r+b', encoding=config.csv_encoding) as fp:
         # use a progress bar
         with tqdm(total=file_size, desc=f"processing {input_file} (bytes)") as progress_bar_in:
             # map the entire file into memory, normally much faster than buffered i/o
@@ -40,9 +40,9 @@ def process_file(files):
         save_dataframe()
 
 
-def save_result(output_file, csv_output):
+def save_result(output_file: str, csv_output: list[str]):
     total_processed_out = 0
-    with open(output_file, 'a+', encoding='utf-8', newline='') as fp:
+    with open(output_file, 'a+', encoding=config.csv_encoding, newline='') as fp:
         with tqdm(total=len(csv_output), desc=f"writing {output_file} (lines)") as progress_bar_out:
             for line in csv_output:
                 total_processed_out += 1

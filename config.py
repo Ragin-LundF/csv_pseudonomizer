@@ -8,6 +8,8 @@ csv_remove_trailing = "\""
 # -- Headers of the target CSV file. This is also used for the dummy file.
 csv_headers = ["counterpartName", "counterpartIBAN", "counterpartAccountNo", "counterpartBIC", "accountNo",
                "purposeLine", "amount"]
+# CSV file encoding
+csv_encoding = 'utf-8'
 # -- Locale for the data (impacts the locale of the Fake library)
 fake_locale = "de_DE"
 

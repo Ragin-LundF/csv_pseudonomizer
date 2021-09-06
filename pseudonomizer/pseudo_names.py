@@ -1,7 +1,9 @@
+from faker import Faker
+
 from pseudonomizer.global_dict import get_element, add_element
 
 
-def pseudonomize_name(fake, element):
+def pseudonomize_name(fake: Faker, element: str):
     replaced_name = get_element(element)
     if replaced_name is None:
         fake_name = fake.name()

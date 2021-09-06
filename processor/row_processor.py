@@ -1,9 +1,11 @@
 import importlib
 
+from faker import Faker
+
 import config
 
 
-def process_row(fake, row):
+def process_row(fake: Faker, row: str):
     term = row.decode("utf-8").split(config.csv_separator)
     term = remove_leading_and_trailing_chars(term)
 
@@ -20,7 +22,7 @@ def process_row(fake, row):
     return ",".join(term)
 
 
-def get_column_id(element):
+def get_column_id(element: str):
     idx = 0
     for col in config.csv_headers:
         if col == element:
@@ -29,7 +31,7 @@ def get_column_id(element):
             idx += 1
 
 
-def remove_leading_and_trailing_chars(column_array):
+def remove_leading_and_trailing_chars(column_array: list[str]):
     new_column_array = []
     for column in column_array:
         column = column.lstrip(config.csv_remove_leading)
