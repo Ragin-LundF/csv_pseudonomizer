@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 import config
 from processor.row_processor import process_row
-from pseudonomizer.global_dict import init, save_mapping_data, load_mapping_dict
+from pseudonomizer.global_dict import init, save_mapping_data
 from utils.file_utils import save_list_of_lines
 
 

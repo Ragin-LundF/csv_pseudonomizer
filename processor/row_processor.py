@@ -1,5 +1,4 @@
 import importlib
-import time
 
 from faker import Faker
 
