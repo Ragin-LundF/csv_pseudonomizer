@@ -1,4 +1,5 @@
 import importlib
+import time
 
 from faker import Faker
 
@@ -19,6 +20,7 @@ def process_row(fake: Faker, row):
             method_to_call = getattr(module, pseudo_element.get('function'))
 
             term[idx_to_modify] = method_to_call(fake, term[idx_to_modify])
+
     return ",".join(term)
 
 

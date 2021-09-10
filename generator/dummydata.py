@@ -59,7 +59,7 @@ def generate_purpose_line(name):
 
 def generate_first_names():
     names = []
-    for i in range(0, 300):
+    for i in range(0, 30000):
         name = fake.first_name()
         if name not in names:
             names.append(name)
@@ -69,7 +69,7 @@ def generate_first_names():
 
 def generate_last_names():
     names = []
-    for i in range(0, 300):
+    for i in range(0, 30000):
         name = fake.last_name()
         if name not in names:
             names.append(name)

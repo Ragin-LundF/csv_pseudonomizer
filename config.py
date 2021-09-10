@@ -16,13 +16,19 @@ fake_locale = 'de_DE'
 # -- Save the mapping as parquet file and reuse the existing one
 save_mapping = True
 
-# -- Mapping file name
-mapping_file_name = 'mapping.parquet'
+# -- Mapping file names
+mapping_file_name_dict = 'mapping_dict'
+mapping_file_name_names = 'mapping_names'
 
 # -- configuration for the pseudonomization
 pseudo = [
     {
         "name": "counterpartName",
+        "import": "pseudonomizer.names.pseudo_names",
+        "function": "pseudonomize_name"
+    },
+    {
+        "name": "purposeLine",
         "import": "pseudonomizer.names.pseudo_names",
         "function": "pseudonomize_name"
     },

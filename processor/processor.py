@@ -1,4 +1,5 @@
 import mmap
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from faker import Faker
@@ -6,8 +7,15 @@ from tqdm import tqdm
 
 import config
 from processor.row_processor import process_row
-from pseudonomizer.global_dict import save_dataframe, load_dataframe
+from pseudonomizer.global_dict import init, save_mapping_data, load_mapping_dict
 from utils.file_utils import save_list_of_lines
+
+
+def start_processing(input_file: str, output_file: str):
+    init()
+    files = [(input_file, output_file)]
+    with ThreadPoolExecutor() as executor:
+        executor.map(process_file, files)
 
 
 def process_file(files: list[str]):
@@ -17,10 +25,7 @@ def process_file(files: list[str]):
     csv_output = []
     file_size = Path(input_file).stat().st_size
     total_processed_in = 0
-    print(f"Processing {input_file}")
-
-    if config.save_mapping:
-        load_dataframe()
+    print(f"Processing {input_file}\n")
 
     with open(input_file, 'r+b') as fp:
         # use a progress bar
@@ -38,7 +43,7 @@ def process_file(files: list[str]):
                     print("The specified method for pseudonomization in config.py was not found. Error: ", attrex)
                     break
                 except BaseException as base:
-                    print("Error while processing files: ", base)
+                    print("General error while processing files: ", base)
                     break
                 total_processed_in += len(line)
                 progress_bar_in.update(total_processed_in - progress_bar_in.n)
@@ -48,4 +53,4 @@ def process_file(files: list[str]):
     save_list_of_lines(output_file, csv_output, mode='a+')
 
     if config.save_mapping:
-        save_dataframe()
+        save_mapping_data()

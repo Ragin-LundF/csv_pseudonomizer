@@ -1,10 +1,8 @@
 import getopt
 import os
 import sys
-from concurrent.futures import ThreadPoolExecutor
 
 from processor.file_split import split
-from pseudonomizer.global_name_dict import init
 
 
 def print_help():
@@ -27,7 +25,8 @@ def print_help():
 
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "di:o:s:", ["dummy", "gen_firstname", "gen_lastname", "input=", "output=", "split="])
+        opts, args = getopt.getopt(sys.argv[1:], "di:o:s:",
+                                   ["dummy", "gen_firstname", "gen_lastname", "input=", "output=", "split="])
         if len(opts) == 0:
             print_help()
             sys.exit(2)
@@ -63,11 +62,8 @@ def main():
             os.remove(output_file)
 
         if file_split_chunks == 0:
-            init()
-            files = [(input_file, output_file)]
-            with ThreadPoolExecutor() as executor:
-                from processor.processor import process_file
-                executor.map(process_file, files)
+            from processor.processor import start_processing
+            start_processing(input_file, output_file)
         else:
             split(input_file, file_split_chunks)
 
