@@ -44,3 +44,4 @@ pseudo = [
 generator_number_of_threads = 6
 generator_records = 10_000
 generator_csv_file_name = 'dummy.csv'
+split_file_template_trailing = "_chunk_%s.csv"

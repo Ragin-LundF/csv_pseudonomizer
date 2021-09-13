@@ -5,7 +5,7 @@ from faker import Faker
 import config
 
 
-def process_row(fake: Faker, row):
+def process_row(fake: Faker, row, with_header=False):
     term = row.decode(config.csv_encoding).split(config.csv_separator)
     term = remove_leading_and_trailing_chars(term)
 
@@ -19,6 +19,9 @@ def process_row(fake: Faker, row):
             method_to_call = getattr(module, pseudo_element.get('function'))
 
             term[idx_to_modify] = method_to_call(fake, term[idx_to_modify])
+    else:
+        if not with_header:
+            return None
 
     return ",".join(term)
 

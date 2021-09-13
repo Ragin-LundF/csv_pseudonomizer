@@ -23,6 +23,7 @@ To configure the tool, please have a look at [config.py](config.py).
 | `--inputfile=` | | `--inputfile=dummy.csv` |
 | `-s` | Split CSV file into new files. This option defines the wanted output line amount. | `-s 5000` |
 | `--split=` | | `--split=5000` |
+| `-a` | Append split files to one output file. It detects the files, which are split by the `-s` parameter. It is required to set input and output file.| `-a` |
 | `-o` | Specify the output file for processing | `-o dummy_processed.csv` |
 | `--outputfile=` | | `--outputfile=dummy_processed.csv` |
 | `--gen_firstnames` | Generates a new list of firstnames in the `pseudonominizer/rules/firstnames.txt` file, depending on the locale in `config.py`. | `--gen_firstnames` |
@@ -36,6 +37,7 @@ python main.py -d
 
 ### Split a file into chunks
 
+#### Splitting
 Short:
 ```bash
 python main.py -i <inputfile> -s <lines for new files>
@@ -68,6 +70,26 @@ Example:
 ```bash
 python main.py -i=dummy.csv -o=dummy_processed.csv
 ```
+
+### Process a set of split files
+
+Short:
+```bash
+python main.py -i <inputfile> -o <outputfile> -a
+```
+
+Long:
+```bash
+python main.py --inputfile=<inputfile> --outputfile=<outputfile> -a
+```
+
+Example:
+```bash
+python main.py -i=dummy.csv -o=dummy_processed.csv -a
+```
+This will detect all `dummy_chunk_*.csv` files and process them into one big output file.
+The `-i` parameter is used here to define the main file name.
+`-a` takes the config `split_file_template_trailing` and replaces the `%s` with an asterisk to find all the related files.
 
 ### Generate new name lists
 
