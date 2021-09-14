@@ -19,7 +19,7 @@ name_dictionary = {}
 name_processor = KeywordProcessor()
 
 
-def init():
+def init(path='.'):
     """
     Initializes the global dictionary.
     It contains some `cached` data like names or IBANs to be able to replace the same with the same.
@@ -28,6 +28,7 @@ def init():
 
     For names, it uses the KeywordProcessor from flashtext to ensure a high performance in string replacements.
 
+    :param path: Root path of the main.py
     :return: None
     """
     if config.save_mapping:
@@ -45,8 +46,8 @@ def init():
     global name_dictionary
     if not bool(name_dictionary):
         faker = Faker(config.fake_locale)
-        first_names = read_file_lines('pseudonomizer/rules/firstnames.txt')
-        last_names = read_file_lines('pseudonomizer/rules/lastnames.txt')
+        first_names = read_file_lines('pseudonomizer/rules/firstnames.txt', path=path)
+        last_names = read_file_lines('pseudonomizer/rules/lastnames.txt', path=path)
 
         for firstname in first_names:
             name_dictionary[firstname.decode(config.csv_encoding).strip()] = [faker.first_name()]
