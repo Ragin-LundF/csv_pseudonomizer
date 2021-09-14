@@ -1,6 +1,4 @@
-import glob
 import mmap
-import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -9,26 +7,41 @@ from tqdm import tqdm
 
 import config
 from model.parameter_dc import Parameter
-from processor.file_split import file_name
-from processor.row_processor import process_row
+from processors.file_split import file_name_for_processing
+from processors.row_processor import process_row
 from pseudonomizer.global_dict import init, save_mapping_data
 from utils.file_utils import save_list_of_lines
 
 
 def start_processing(params: Parameter):
+    """
+    Will be called to start the processing with multithreading.
+
+    :param params: Parameter dataclass, which contains the parameters like filename(s) for the execution.
+    :return: None
+    """
     init()
     with ThreadPoolExecutor() as executor:
         executor.map(process_file, [params])
 
 
 def process_file(params: Parameter):
+    """
+    Process a the file(s).
+    It figures out, which file(s) it has to read (split file vs. one file) and iterates over them.
+    Each file will be read in binary mode into memory and iterates over the lines and processes them.
+    After all files are processed, it stores the data into the output file.
+
+    :param params:  Parameter dataclass, which contains the parameters like filename(s) for the execution.
+    :return: None
+    """
     fake = Faker(config.fake_locale)
     csv_output = []
     file_size = Path(params.input_file).stat().st_size
     total_processed_in = 0
     print(f"Processing {params.input_file}\n")
 
-    for file in file_name(params):
+    for file in file_name_for_processing(params):
         with open(file, 'r+b') as fp:
             # use a progress bar
             with tqdm(total=file_size, desc=f"processing {file} (bytes)") as progress_bar_in:

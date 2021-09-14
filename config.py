@@ -25,17 +25,17 @@ pseudo = [
     {
         "name": "counterpartName",
         "import": "pseudonomizer.names.pseudo_names",
-        "function": "pseudonomize_name"
+        "class": "NamePseudonomizer"
     },
     {
         "name": "purposeLine",
         "import": "pseudonomizer.names.pseudo_names",
-        "function": "pseudonomize_name"
+        "class": "NamePseudonomizer"
     },
     {
         "name": "counterpartIBAN",
         "import": "pseudonomizer.iban.pseudo_iban",
-        "function": "pseudonomize_iban"
+        "class": "IbanPseudonomizer"
     }
 ]
 

@@ -3,7 +3,7 @@ import os
 import sys
 
 from model.parameter_dc import Parameter
-from processor.file_split import split
+from processors.file_split import split
 
 
 def print_help():
@@ -68,7 +68,7 @@ def main():
             os.remove(parameter.output_file)
 
         if file_split_chunks == 0:
-            from processor.processor import start_processing
+            from processors.processor import start_processing
             start_processing(parameter)
         else:
             split(parameter.input_file, file_split_chunks)

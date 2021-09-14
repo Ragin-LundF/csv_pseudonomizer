@@ -5,12 +5,26 @@ This tool replaces data in big CSV files with pseudo data.
 ## Structure
 
 - `generator` - contains the code for the dummy data generator
-- `processor` - main processing logic
+- `model` - data classes
+- `processors` - main processing logic
 - `pseudonomizer` - methods to pseudonomize the data
+- `utils` - util methods
 
 ## Configuration
 
+### General configuration
 To configure the tool, please have a look at [config.py](config.py).
+
+### Names list
+To replace names in the CSV, the tool requires lists of names which should be replaced.
+- [firstnames.txt](pseudonomizer/rules/firstnames.txt)
+- [lastnames.txt](pseudonomizer/rules/lastnames.txt)
+
+### Company Regexes
+To keep company names, you can add regex to find a company.
+This is because companies are not under GDPR.
+The regexes can be found under:
+- [company_regexes.py](pseudonomizer/rules/company_regexes.py)
 
 ## Usage
 
