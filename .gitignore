@@ -1,6 +1,6 @@
 /venv/
 *.csv
-*.parquet
+*.pkl
 *.iml
 .idea
 __pycache__
