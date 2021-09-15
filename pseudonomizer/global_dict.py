@@ -165,7 +165,7 @@ def load_name_dict():
     :return: None
     """
     if os.path.isfile(filename(config.mapping_file_name_names)):
-        with open(filename(config.mapping_file_name_dict), 'rb') as handle:
+        with open(filename(config.mapping_file_name_names), 'rb') as handle:
             global name_dictionary
             name_dictionary = pickle.load(handle)
 
