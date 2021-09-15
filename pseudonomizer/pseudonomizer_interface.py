@@ -8,5 +8,5 @@ class PseudonomizerInterface:
     callable from the row_processor.
     """
     @staticmethod
-    def pseudonomize(fake: Faker, element: str) -> str:
+    def pseudonomize(fake: Faker, element: any) -> any:
         pass

@@ -11,13 +11,13 @@ from pseudonomizer.rules.company_regexes import company_detection_regexes
 from utils.file_utils import read_file_lines
 
 # global objects
-from utils.replace_tool import Replacer
+from utils.replace_tool import ReplaceUtils
 
 ReplaceObj = make_dataclass("ReplaceObj", [("original", str), ("replaced", str)])
 global_replace_dict = dict()
 global_is_company_regexes = []
 name_dictionary = {}
-name_replacer = Replacer()
+name_replacer = ReplaceUtils()
 
 
 def init(path='.'):
@@ -78,7 +78,7 @@ def replace_names_in_element(element: str) -> str:
     return name_replacer.replace(element)
 
 
-def get_element(element: str) -> Union[str, None]:
+def get_element(element: str) -> str:
     """
     Return the cached replacement of an element (like IBAN).
     If nothing was found, it returns None.

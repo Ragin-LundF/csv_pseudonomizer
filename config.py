@@ -36,6 +36,11 @@ pseudo = [
         "name": "counterpartIBAN",
         "import": "pseudonomizer.iban.pseudo_iban",
         "class": "IbanPseudonomizer"
+    },
+    {
+        "name": "counterpartAccountNo",
+        "import": "pseudonomizer.accountno.pseudo_account_no",
+        "class": "AccountNoPseudonomizer"
     }
 ]
 
