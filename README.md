@@ -124,3 +124,23 @@ Lastnames:
 ```bash
 python main.py --gen-lastnames
 ```
+
+# Performance
+
+## Create Dummy Data
+Create dummy data is a functionality to create test samples.
+It uses the defined cores in the configuration and pushes all data first into the RAM.
+This process requires big machines with a large amount of RAM if you want to create really big data.
+
+To create 50.000.000 records a minimum of 50 GB RAM is recommended.
+A regular notebook with 32 GB RAM can create 1.000.000 records in ~7 minutes (tested on AMD Ryzen 4700X).
+
+The processing of the data is a bit faster.
+In the default configuration (as-it-is) the tool can process on an AMD Ryzen 4700X with 32 GB RAM:
+- 1.000.000 records in ~2,5 minutes
+- 10.000.000 records in ~27 minutes.
+
+The performance is more or less linear, which means, if you want to process 100.000.000 records, you need ~270 minutes.
+
+If new rules should be used, try to avoid regular expressions, because they are extremely slow.
+Each rule decreases also the performance.
