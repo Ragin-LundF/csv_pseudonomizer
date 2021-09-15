@@ -5,9 +5,10 @@ from tests.test_base import BaseTest
 class TestIbanPseudonomizer(BaseTest):
     __test__ = True
 
-    def testIbanPseudonomize(self):
-        iban_first = "DE1234567879"
-        iban_second = "DE987654321"
+    def test_iban_pseudonomize(self):
+        iban_first = 'DE1234567879'
+        iban_second = 'DE987654321'
+
         result_first = IbanPseudonomizer.pseudonomize(self.faker, iban_first)
         result_second = IbanPseudonomizer.pseudonomize(self.faker, iban_second)
         result_third = IbanPseudonomizer.pseudonomize(self.faker, iban_first)
