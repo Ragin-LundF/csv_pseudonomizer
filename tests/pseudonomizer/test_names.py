@@ -31,6 +31,16 @@ class TestNamePseudonomizer(BaseTest):
         self.assertTrue(result_purpose.startswith('Billing '))
         self.assertTrue(result_purpose.endswith('RG 123'))
 
+    def test_name_multiple_times(self):
+        purpose = 'Max Müller Billing Max and Mrs. Müller'
+
+        result_replace = NamePseudonomizer.pseudonomize(self.faker, purpose)
+
+        print(result_replace)
+        self.assertNotEqual(purpose, result_replace)
+        self.assertTrue('Müller' not in result_replace)
+        self.assertTrue('Max' not in result_replace)
+
     def test_company_name(self):
         name = 'Max Müller GmbH'
         result_name = NamePseudonomizer.pseudonomize(self.faker, name)

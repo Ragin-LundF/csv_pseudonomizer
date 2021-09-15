@@ -59,6 +59,13 @@ class ReplaceUtils:
         :param element:  The element that contains possible keywords to be replaced.
         :return: Replaced string
         """
-        for end, (key, value) in self.automaton.iter(element):
-            return element[:end - len(key) + 1] + value + element[end + 1:]
-        return element
+        result = []
+        words = element.split(' ')
+        for i, word in enumerate(words):
+            replaced = False
+            for end, (key, value) in self.automaton.iter(word):
+                result.append(word[:end - len(key) + 1] + value + word[end + 1:])
+                replaced = True
+            if not replaced:
+                result.append(word)
+        return " ".join(result)
