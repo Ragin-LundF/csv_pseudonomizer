@@ -1,13 +1,15 @@
 import csv
+import logging
 import multiprocessing
+import uuid
 from contextlib import closing
 
 from faker import Faker
 from tqdm import tqdm
 
 import config
+from utils.csv_utils import CsvSemicolon
 
-# the amount of data will be records/number_of_threads...
 fake = Faker(config.fake_locale)
 
 
@@ -18,11 +20,11 @@ def generate_dummy_data():
     :return: None
     """
     with closing(multiprocessing.Pool()) as pool:
-        print('Create data (progress per thread)...')
+        logging.info('Create data (progress per thread)...')
         joined_csv_rows = pool.imap_unordered(create_fake_csv_rows, range(config.generator_number_of_threads))
 
         with open(config.generator_csv_file_name, 'wt', encoding='utf-8', newline='') as csvFile:
-            writer = csv.DictWriter(csvFile, fieldnames=config.csv_headers)
+            writer = csv.DictWriter(csvFile, fieldnames=config.csv_headers, dialect=CsvSemicolon)
             writer.writeheader()
             for row_list in joined_csv_rows:
                 writer.writerows(row_list)
@@ -40,13 +42,35 @@ def create_fake_csv_rows(params) -> []:
     for _ in tqdm(range(int(config.generator_records / config.generator_number_of_threads))):
         counterpart_name = generate_counterpart_name()
         row_list.append({
+            'id': str(uuid.uuid4()),
+            'parentId': None,
+            'accountId': str(uuid.uuid4()),
+            'bankBookingDate': fake.date(),
+            'amount': fake.pricetag(),
+            'purpose': generate_purpose_line(counterpart_name),
+            'swiftCode': 'NMSC',
             'counterpartName': counterpart_name,
-            'counterpartIBAN': fake.iban(),
-            'counterpartAccountNo': fake.random_int(min=1000000, max=99999999),
+            'counterpartIban': fake.iban(),
+            'counterpartMandateReference': None,
+            'counterpartCustomerReference': None,
+            'counterpartAccountNumber': fake.random_int(min=1000000000, max=9999999999),
+            'counterpartBLZ': None,
             'counterpartBIC': fake.swift(length=11),
-            'accountNo': fake.random_int(min=1000000, max=99999999),
-            'purposeLine': generate_purpose_line(counterpart_name),
-            'amount': fake.pricetag()
+            'end2endReference': None,
+            'creditorID': None,
+            'debitorID': None,
+            'type': None,
+            'typeCodeZka': None,
+            'sepaPurposeCode': None,
+            'accountCurrency': fake.currency_code(),
+            'accountType': 'Checking',
+            'balance': fake.pricetag(),
+            'overdraft': fake.pricetag(),
+            'overdraftLimit': fake.pricetag(),
+            'availableFunds': fake.pricetag(),
+            'accountNumber': fake.random_int(min=1000000000, max=9999999999),
+            'IBAN': fake.iban(),
+            'balanceDate': fake.date()
         })
     return row_list
 

@@ -1,20 +1,17 @@
+import logging
 import os
-from dataclasses import make_dataclass
+import pickle
 from typing import Union
 
-import pyarrow as pa
-import pyarrow.parquet as pq
 from faker import Faker
 
 import config
 from pseudonomizer.rules.company_regexes import company_detection_regexes
 from utils.file_utils import read_file_lines
-
-# global objects
 from utils.replace_tool import ReplaceUtils
 
-ReplaceObj = make_dataclass("ReplaceObj", [("original", str), ("replaced", str)])
-global_replace_dict = dict()
+# global objects
+global_replace_dict = {}
 global_is_company_regexes = []
 name_dictionary = {}
 name_replacer = ReplaceUtils()
@@ -33,11 +30,11 @@ def init(path='.'):
     :return: None
     """
     if config.save_mapping:
-        print("Loading existing mapping dictionary....")
+        logging.info("Loading existing mapping dictionary....")
         load_mapping_dict()
-        print("Loading existing name dictionary....")
+        logging.info("Loading existing name dictionary....")
         load_name_dict()
-        print("Loading done...")
+        logging.info("Loading done...")
 
     # initialize global is company regexes
     global global_is_company_regexes
@@ -78,7 +75,7 @@ def replace_names_in_element(element: str) -> str:
     return name_replacer.replace(element)
 
 
-def get_element(element: str) -> str:
+def get_element(element: str) -> Union[str, None]:
     """
     Return the cached replacement of an element (like IBAN).
     If nothing was found, it returns None.
@@ -122,52 +119,62 @@ def save_mapping_data():
     :return: None
     """
     # Store name dict
-    save_mapping(name_dictionary, filename(config.mapping_file_name_names))
+    try:
+        logging.info("Saving name mapping file...")
+        save_mapping(name_dictionary, filename(config.mapping_file_name_names))
+    except BaseException as bse:
+        logging.error('Unable to save names dictionary.')
+        logging.error(bse, exc_info=True)
     # Store other mappings dict
-    save_mapping(global_replace_dict, filename(config.mapping_file_name_dict))
+    try:
+        logging.info("Saving global mapping file...")
+        save_mapping(global_replace_dict, filename(config.mapping_file_name_dict))
+    except BaseException as bse:
+        logging.error('Unable to save mapping dictionary.')
+        logging.error(bse, exc_info=True)
 
 
 def save_mapping(data: dict, file: str):
     """
-    Save a mapping to the disk as parquet file.
+    Save a mapping to the disk as pickle file.
 
     :param data: dict that should be stored.
     :param file: output filename
     :return: None
     """
-    table = pa.Table.from_pydict(data)
-    pq.write_table(table, file)
+    with open(file, 'wb') as handle:
+        pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 def load_mapping_dict():
     """
-    Read the mapping parquet file from disk and push it to the global_replace_dict.
+    Read the mapping pickle file from disk and push it to the global_replace_dict.
 
     :return: None
     """
     if os.path.isfile(filename(config.mapping_file_name_dict)):
-        table = pq.read_table(filename(config.mapping_file_name_dict))
-        global global_replace_dict
-        global_replace_dict = table.to_pydict()
+        with open(filename(config.mapping_file_name_dict), 'rb') as handle:
+            global global_replace_dict
+            global_replace_dict = pickle.load(handle)
 
 
 def load_name_dict():
     """
-    Load the name parquet file and push it to the name dict.
+    Load the name pickle file and push it to the name dict.
 
     :return: None
     """
     if os.path.isfile(filename(config.mapping_file_name_names)):
-        table = pq.read_table(filename(config.mapping_file_name_names))
-        global name_dictionary
-        name_dictionary = table.to_pydict()
+        with open(filename(config.mapping_file_name_dict), 'rb') as handle:
+            global name_dictionary
+            name_dictionary = pickle.load(handle)
 
 
 def filename(name: str) -> str:
     """
-    Create the filename for the parquet files with extension.
+    Create the filename for the pickle files with extension.
 
     :param name: base name.
     :return: file name with extension
     """
-    return f"{name}.parquet"
+    return f"{name}.pkl"

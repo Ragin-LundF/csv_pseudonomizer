@@ -1,4 +1,5 @@
 import importlib
+import logging
 from typing import Union
 
 from faker import Faker
@@ -25,17 +26,17 @@ def process_row(fake: Faker, row, with_header=False) -> Union[str, None]:
         for pseudo_element in config.pseudo:
             idx_to_modify = get_column_id(pseudo_element.get('name'))
             if idx_to_modify is None:
-                print(f"Unable to find element {pseudo_element.get('name')}")
+                logging.error(f"Unable to find element {pseudo_element.get('name')}")
                 raise LookupError(f"Unable to find element {pseudo_element.get('name')}")
             module = importlib.import_module(pseudo_element.get('import'))
             cls = getattr(module, pseudo_element.get('class'))
 
-            term[idx_to_modify] = cls.pseudonomize(fake, term[idx_to_modify])
+            term[idx_to_modify] = cls.pseudonomize(fake, str(term[idx_to_modify]))
     else:
         if not with_header:
             return None
 
-    return ','.join(term)
+    return config.csv_separator.join(term)
 
 
 def get_column_id(element: str) -> Union[int, None]:

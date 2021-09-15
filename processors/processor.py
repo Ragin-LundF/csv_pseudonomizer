@@ -1,3 +1,4 @@
+import logging
 import mmap
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -39,7 +40,7 @@ def process_file(params: Parameter):
     csv_output = []
     file_size = Path(params.input_file).stat().st_size
     total_processed_in = 0
-    print(f"Processing {params.input_file}\n")
+    logging.info(f"Processing {params.input_file}")
 
     for file in file_name_for_processing(params):
         with open(file, 'r+b') as fp:
@@ -54,13 +55,16 @@ def process_file(params: Parameter):
                         if processed_output is not None:
                             csv_output.append(processed_output)
                     except ModuleNotFoundError as mnfe:
-                        print('The specified module for pseudonomization in the config.py was not found. Error: ', mnfe)
+                        logging.error('The specified module for pseudonomization in the config.py was not found.')
+                        logging.critical(mnfe, exc_info=True)
                         break
                     except AttributeError as attrex:
-                        print('The specified method for pseudonomization in config.py was not found. Error: ', attrex)
+                        logging.error('The specified method for pseudonomization in config.py was not found.')
+                        logging.critical(attrex, exc_info=True)
                         break
                     except BaseException as base:
-                        print('General error while processing files: ', base)
+                        logging.error('General error while processing files.')
+                        logging.critical(base, exc_info=True)
                         break
                     total_processed_in += len(line)
                     progress_bar_in.update(total_processed_in - progress_bar_in.n)
