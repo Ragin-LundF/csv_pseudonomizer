@@ -68,4 +68,4 @@ class ReplaceUtils:
                 replaced = True
             if not replaced:
                 result.append(word)
-        return " ".join(result)
+        return ' '.join(result)

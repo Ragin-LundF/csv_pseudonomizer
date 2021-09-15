@@ -18,7 +18,7 @@ def generate_dummy_data():
     :return: None
     """
     with closing(multiprocessing.Pool()) as pool:
-        print("Create data (progress per thread)...")
+        print('Create data (progress per thread)...')
         joined_csv_rows = pool.imap_unordered(create_fake_csv_rows, range(config.generator_number_of_threads))
 
         with open(config.generator_csv_file_name, 'wt', encoding='utf-8', newline='') as csvFile:
@@ -40,13 +40,13 @@ def create_fake_csv_rows(params) -> []:
     for _ in tqdm(range(int(config.generator_records / config.generator_number_of_threads))):
         counterpart_name = generate_counterpart_name()
         row_list.append({
-            "counterpartName": counterpart_name,
-            "counterpartIBAN": fake.iban(),
-            "counterpartAccountNo": fake.random_int(min=1000000, max=99999999),
-            "counterpartBIC": fake.swift(length=11),
-            "accountNo": fake.random_int(min=1000000, max=99999999),
-            "purposeLine": generate_purpose_line(counterpart_name),
-            "amount": fake.pricetag()
+            'counterpartName': counterpart_name,
+            'counterpartIBAN': fake.iban(),
+            'counterpartAccountNo': fake.random_int(min=1000000, max=99999999),
+            'counterpartBIC': fake.swift(length=11),
+            'accountNo': fake.random_int(min=1000000, max=99999999),
+            'purposeLine': generate_purpose_line(counterpart_name),
+            'amount': fake.pricetag()
         })
     return row_list
 
@@ -88,7 +88,7 @@ def generate_first_names():
         if name not in names:
             names.append(name)
     from utils.file_utils import save_list_of_lines
-    save_list_of_lines("pseudonomizer/rules/firstnames.txt", names)
+    save_list_of_lines('pseudonomizer/rules/firstnames.txt', names)
 
 
 def generate_last_names():
@@ -103,4 +103,4 @@ def generate_last_names():
         if name not in names:
             names.append(name)
     from utils.file_utils import save_list_of_lines
-    save_list_of_lines("pseudonomizer/rules/lastnames.txt", names)
+    save_list_of_lines('pseudonomizer/rules/lastnames.txt', names)

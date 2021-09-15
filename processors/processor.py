@@ -54,13 +54,13 @@ def process_file(params: Parameter):
                         if processed_output is not None:
                             csv_output.append(processed_output)
                     except ModuleNotFoundError as mnfe:
-                        print("The specified module for pseudonomization in the config.py was not found. Error: ", mnfe)
+                        print('The specified module for pseudonomization in the config.py was not found. Error: ', mnfe)
                         break
                     except AttributeError as attrex:
-                        print("The specified method for pseudonomization in config.py was not found. Error: ", attrex)
+                        print('The specified method for pseudonomization in config.py was not found. Error: ', attrex)
                         break
                     except BaseException as base:
-                        print("General error while processing files: ", base)
+                        print('General error while processing files: ', base)
                         break
                     total_processed_in += len(line)
                     progress_bar_in.update(total_processed_in - progress_bar_in.n)

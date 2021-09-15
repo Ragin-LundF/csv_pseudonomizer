@@ -35,7 +35,7 @@ def process_row(fake: Faker, row, with_header=False) -> Union[str, None]:
         if not with_header:
             return None
 
-    return ",".join(term)
+    return ','.join(term)
 
 
 def get_column_id(element: str) -> Union[int, None]:

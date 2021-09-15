@@ -68,7 +68,7 @@ def file_name_for_processing(params: Parameter) -> []:
     file_list = []
     if params.is_split_file:
         file_name_without_ext = os.path.splitext(params.input_file)[0]
-        trailing_template = config.split_file_template_trailing.replace("%s", "*")
+        trailing_template = config.split_file_template_trailing.replace('%s', '*')
         file_list = glob.glob(file_name_without_ext + trailing_template)
     else:
         file_list.append(params.input_file)
