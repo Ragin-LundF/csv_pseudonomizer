@@ -36,7 +36,6 @@ class TestNamePseudonomizer(BaseTest):
 
         result_replace = NamePseudonomizer.pseudonomize(self.faker, purpose)
 
-        print(result_replace)
         self.assertNotEqual(purpose, result_replace)
         self.assertTrue('Müller' not in result_replace)
         self.assertTrue('Max' not in result_replace)
