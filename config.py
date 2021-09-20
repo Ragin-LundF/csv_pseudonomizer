@@ -39,6 +39,12 @@ csv_headers = [
     'IBAN',
     'balanceDate'
 ]
+
+csv_headers_remove_in_target = [
+    'id',
+    'parentId'
+]
+
 # -- CSV file encoding
 csv_encoding = 'utf-8'
 # -- Locale for the data (impacts the locale of the Fake library)
