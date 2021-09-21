@@ -1,7 +1,8 @@
 import logging
 import os
 import pickle
-from typing import Union
+import re
+from typing import Union, Optional
 
 from faker import Faker
 
@@ -15,6 +16,7 @@ global_replace_dict = {}
 global_is_company_regexes = []
 name_dictionary = {}
 name_replacer = ReplaceUtils()
+iban_regex = re.compile(r'[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}')
 
 
 def init(path='.'):
@@ -31,9 +33,9 @@ def init(path='.'):
     """
     if config.save_mapping:
         logging.info("Loading existing mapping dictionary....")
-        load_mapping_dict()
+        __load_mapping_dict()
         logging.info("Loading existing name dictionary....")
-        load_name_dict()
+        __load_name_dict()
         logging.info("Loading done...")
 
     # initialize global is company regexes
@@ -111,6 +113,12 @@ def is_company_name(element: str) -> bool:
     return global_is_company_regexes[0].search(element)
 
 
+def contains_iban(element: str) -> Optional[str]:
+    iban_srch = iban_regex.search(element)
+    if iban_srch is not None:
+        return iban_srch.group(0)
+
+
 def save_mapping_data():
     """
     Save the mapping data to files.
@@ -121,20 +129,20 @@ def save_mapping_data():
     # Store name dict
     try:
         logging.info("Saving name mapping file...")
-        save_mapping(name_dictionary, filename(config.mapping_file_name_names))
+        __save_mapping(name_dictionary, __filename(config.mapping_file_name_names))
     except BaseException as bse:
         logging.error('Unable to save names dictionary.')
         logging.error(bse, exc_info=True)
     # Store other mappings dict
     try:
         logging.info("Saving global mapping file...")
-        save_mapping(global_replace_dict, filename(config.mapping_file_name_dict))
+        __save_mapping(global_replace_dict, __filename(config.mapping_file_name_dict))
     except BaseException as bse:
         logging.error('Unable to save mapping dictionary.')
         logging.error(bse, exc_info=True)
 
 
-def save_mapping(data: dict, file: str):
+def __save_mapping(data: dict, file: str):
     """
     Save a mapping to the disk as pickle file.
 
@@ -146,31 +154,31 @@ def save_mapping(data: dict, file: str):
         pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def load_mapping_dict():
+def __load_mapping_dict():
     """
     Read the mapping pickle file from disk and push it to the global_replace_dict.
 
     :return: None
     """
-    if os.path.isfile(filename(config.mapping_file_name_dict)):
-        with open(filename(config.mapping_file_name_dict), 'rb') as handle:
+    if os.path.isfile(__filename(config.mapping_file_name_dict)):
+        with open(__filename(config.mapping_file_name_dict), 'rb') as handle:
             global global_replace_dict
             global_replace_dict = pickle.load(handle)
 
 
-def load_name_dict():
+def __load_name_dict():
     """
     Load the name pickle file and push it to the name dict.
 
     :return: None
     """
-    if os.path.isfile(filename(config.mapping_file_name_names)):
-        with open(filename(config.mapping_file_name_names), 'rb') as handle:
+    if os.path.isfile(__filename(config.mapping_file_name_names)):
+        with open(__filename(config.mapping_file_name_names), 'rb') as handle:
             global name_dictionary
             name_dictionary = pickle.load(handle)
 
 
-def filename(name: str) -> str:
+def __filename(name: str) -> str:
     """
     Create the filename for the pickle files with extension.
 

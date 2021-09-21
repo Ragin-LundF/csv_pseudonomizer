@@ -13,7 +13,7 @@ from utils.csv_utils import CsvSemicolon
 fake = Faker(config.fake_locale)
 
 
-def generate_dummy_data():
+def generate_dummy_data() -> None:
     """
     Function to generate CSV data and write it to a file.
 
@@ -24,7 +24,7 @@ def generate_dummy_data():
         joined_csv_rows = pool.imap_unordered(create_fake_csv_rows, range(config.generator_number_of_threads))
 
         with open(config.generator_csv_file_name, 'wt', encoding='utf-8', newline='') as csvFile:
-            writer = csv.DictWriter(csvFile, fieldnames=config.csv_headers, dialect=CsvSemicolon)
+            writer = csv.DictWriter(csvFile, fieldnames=config.csv_headers, dialect=CsvSemicolon, quotechar='"', quoting=csv.QUOTE_ALL)
             writer.writeheader()
             for row_list in joined_csv_rows:
                 writer.writerows(row_list)
@@ -42,35 +42,35 @@ def create_fake_csv_rows(params) -> []:
     for _ in tqdm(range(int(config.generator_records / config.generator_number_of_threads))):
         counterpart_name = generate_counterpart_name()
         row_list.append({
-            'id': str(uuid.uuid4()),
-            'parentId': None,
-            'accountId': str(uuid.uuid4()),
-            'bankBookingDate': fake.date(),
-            'amount': fake.pricetag(),
-            'purpose': generate_purpose_line(counterpart_name),
+            'id': f'{fake.random_int(min=1000000, max=9999999999)}',
+            'parentId': 'NULL',
+            'bankBookingDate': f'{fake.date()}',
+            'amount': f'{fake.pricetag()}',
+            'purpose': f'{generate_purpose_line(counterpart_name)}',
             'swiftCode': 'NMSC',
-            'counterpartName': counterpart_name,
-            'counterpartIban': fake.iban(),
-            'counterpartMandateReference': None,
-            'counterpartCustomerReference': None,
-            'counterpartAccountNumber': fake.random_int(min=1000000000, max=9999999999),
-            'counterpartBLZ': None,
-            'counterpartBIC': fake.swift(length=11),
-            'end2endReference': None,
-            'creditorID': None,
-            'debitorID': None,
-            'type': None,
-            'typeCodeZka': None,
-            'sepaPurposeCode': None,
-            'accountCurrency': fake.currency_code(),
+            'counterpartName': f'{counterpart_name}',
+            'counterpartIban': f'{fake.iban()}',
+            'counterpartMandateReference': 'NULL',
+            'counterpartCustomerReference': 'NULL',
+            'counterpartAccountNumber': f'{fake.random_int(min=1000000000, max=9999999999)}',
+            'counterpartBLZ': 'NULL',
+            'counterpartBIC': f'{fake.swift(length=11)}',
+            'end2endReference': 'NULL',
+            'creditorID': 'NULL',
+            'debitorID': 'NULL',
+            'type': 'NULL',
+            'typeCodeZka': 'NULL',
+            'sepaPurposeCode': 'NULL',
+            'accountCurrency': f'{fake.currency_code()}',
             'accountType': 'Checking',
-            'balance': fake.pricetag(),
-            'overdraft': fake.pricetag(),
-            'overdraftLimit': fake.pricetag(),
-            'availableFunds': fake.pricetag(),
-            'accountNumber': fake.random_int(min=1000000000, max=9999999999),
-            'IBAN': fake.iban(),
-            'balanceDate': fake.date()
+            'balance': f'{fake.pricetag()}',
+            'overdraft': f'{fake.pricetag()}',
+            'overdraftLimit': f'{fake.pricetag()}',
+            'availableFunds': f'{fake.pricetag()}',
+            'accountNumber': f'{fake.random_int(min=1000000000, max=9999999999)}',
+            'IBAN': f'{fake.iban()}',
+            'balanceDate': f'{fake.date()}',
+            'accountSeized': 'false'
         })
     return row_list
 
@@ -100,7 +100,7 @@ def generate_purpose_line(name) -> str:
         return fake.sentence(nb_words=5)
 
 
-def generate_first_names():
+def generate_first_names() -> None:
     """
     Generate a list of fake first names in the firstnames.txt file.
 
@@ -115,7 +115,7 @@ def generate_first_names():
     save_list_of_lines('pseudonomizer/rules/firstnames.txt', names)
 
 
-def generate_last_names():
+def generate_last_names() -> None:
     """
     Generate a list of fake last names in the lastnames.txt file.
 

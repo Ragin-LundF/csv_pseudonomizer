@@ -8,13 +8,12 @@ from tqdm import tqdm
 
 import config
 from model.parameter_dc import Parameter
-from processors.file_split import file_name_for_processing
 from processors.row_processor import process_row
 from pseudonomizer.global_dict import init, save_mapping_data
-from utils.file_utils import save_list_of_lines
+from utils.file_utils import save_list_of_lines, file_name_for_processing
 
 
-def start_processing(params: Parameter):
+def start_processing(params: Parameter) -> None:
     """
     Will be called to start the processing with multithreading.
 
@@ -23,10 +22,10 @@ def start_processing(params: Parameter):
     """
     init()
     with ThreadPoolExecutor() as executor:
-        executor.map(process_file, [params])
+        executor.map(_process_file, [params])
 
 
-def process_file(params: Parameter):
+def _process_file(params: Parameter) -> None:
     """
     Process a the file(s).
     It figures out, which file(s) it has to read (split file vs. one file) and iterates over them.

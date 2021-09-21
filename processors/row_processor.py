@@ -1,13 +1,13 @@
 import importlib
 import logging
-from typing import Union
+from typing import Optional
 
 from faker import Faker
 
 import config
 
 
-def process_row(fake: Faker, row, with_header=False) -> Union[str, None]:
+def process_row(fake: Faker, row, with_header=False) -> Optional[str]:
     """
     This method will be called to process a row of a CSV file.
     It ignores the header line by comparing the first element with the configuration
@@ -20,11 +20,11 @@ def process_row(fake: Faker, row, with_header=False) -> Union[str, None]:
     :return: the processed line or None if the header line was not processed from the first split file
     """
     term = row.decode(config.csv_encoding).split(config.csv_separator)
-    term = remove_leading_and_trailing_chars(term)
+    term = __remove_leading_and_trailing_chars(term)
 
     if term[0] != config.csv_headers[0]:
         for pseudo_element in config.pseudo:
-            idx_to_modify = get_column_id(pseudo_element.get('name'))
+            idx_to_modify = __get_column_id(pseudo_element.get('name'))
             if idx_to_modify is None:
                 logging.error(f"Unable to find element {pseudo_element.get('name')}")
                 raise LookupError(f"Unable to find element {pseudo_element.get('name')}")
@@ -36,21 +36,22 @@ def process_row(fake: Faker, row, with_header=False) -> Union[str, None]:
         if not with_header:
             return None
 
-    return config.csv_separator.join(remove_not_required_columns(term))
+    __add_leading_and_trailing_chars(term)
+    return config.csv_separator.join(__remove_not_required_columns(term))
 
 
-def remove_not_required_columns(term: []) -> []:
+def __remove_not_required_columns(term: []) -> []:
     if len(config.csv_headers_remove_in_target) > 0:
         headers = list(config.csv_headers)
         for col_to_remove in config.csv_headers_remove_in_target:
-            idx_to_remove = get_column_id_with_header(col_to_remove, headers)
+            idx_to_remove = __get_column_id_with_header(col_to_remove, headers)
             term.pop(idx_to_remove)
             headers.pop(idx_to_remove)
 
     return term
 
 
-def get_column_id(element: str) -> Union[int, None]:
+def __get_column_id(element: str) -> Optional[int]:
     """
     Returns the index ID of the column.
     The structure of the CSV is defined in the configuration.
@@ -66,7 +67,7 @@ def get_column_id(element: str) -> Union[int, None]:
             idx += 1
 
 
-def get_column_id_with_header(element: str, headers: []) -> Union[int, None]:
+def __get_column_id_with_header(element: str, headers: []) -> Optional[int]:
     """
     Returns the index ID of the column.
     The structure of the CSV is defined in the configuration.
@@ -83,18 +84,35 @@ def get_column_id_with_header(element: str, headers: []) -> Union[int, None]:
             idx += 1
 
 
-def remove_leading_and_trailing_chars(column_array: list[str]) -> []:
+def __remove_leading_and_trailing_chars(column_list: []) -> []:
     """
     Removes leading and trailing characters from the array.
     The config defines, which leading and trailing characters should be removed.
 
-    :param column_array: Array to process
+    :param column_list: Array to process
     :return: Striped array
     """
-    new_column_array = []
-    for column in column_array:
+    new_column_list = []
+    for column in column_list:
         column = column.lstrip(config.csv_remove_leading)
         column = column.rstrip(config.csv_remove_trailing)
-        new_column_array.append(column)
+        new_column_list.append(column)
 
-    return new_column_array
+    return new_column_list
+
+
+def __add_leading_and_trailing_chars(column_list: []) -> None:
+    """
+    Add leading characters to the first column and trailing to the last column if
+    the CSV uses more than one character as separator.
+    E.g. ""Col1"";""Col2""
+
+    :param column_list: Array to process
+    :return: None
+    """
+    if len(column_list) > 0:
+        if len(config.csv_column_leading_chars_first) > 0:
+            column_list[0] = f"{config.csv_column_leading_chars_first}{column_list[0]}"
+
+        if len(config.csv_column_trailing_chars_end) > 0:
+            column_list[len(column_list)-1] = f"{column_list[len(column_list)-1]}{config.csv_column_trailing_chars_end}"
