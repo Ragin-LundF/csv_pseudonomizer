@@ -10,6 +10,28 @@ This tool replaces data in big CSV files with pseudo data.
 - `pseudonomizer` - methods to pseudonomize the data
 - `utils` - util methods
 
+
+## Installation
+
+### Prerequisites
+#### Cent OS
+- GCC
+- Python 3.9
+- Pip
+
+#### Windows
+- Visual C++ Library (https://visualstudio.microsoft.com/de/visual-cpp-build-tools/)
+- Python 3.9
+- Pip
+
+### Application checkout and preparation
+```git
+git clone https://github.com/Ragin-LundF/csv_pseudonomizer.git
+cd csv_pseudonomizer
+pip install -r requirements.txt
+```
+
+
 ## Configuration
 
 ### General configuration
