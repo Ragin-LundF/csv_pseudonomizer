@@ -27,6 +27,12 @@ class TestNamePseudonomizer(BaseTest):
         self.assertTrue('Müller' not in result_replace)
         self.assertTrue('Max' not in result_replace)
 
+    def test_replace_case_insensitive(self):
+        name = 'mAx mAier krankenversicherung'
+        result_name = NamePseudonomizer.pseudonomize(self.faker, name)
+
+        self.assertNotEqual(name, result_name)
+
     def test_company_name(self):
         name = 'Max Müller GmbH'
         result_name = NamePseudonomizer.pseudonomize(self.faker, name)

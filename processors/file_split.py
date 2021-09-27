@@ -36,7 +36,8 @@ def split(input_file: str, number_of_chunks: int, output_path='.') -> None:
                         chunk_file_name,
                         current_chunk
                     )
-                    current_out_writer = csv.writer(open(current_out_path, 'w', newline='', encoding=config.csv_encoding))
+                    current_out_writer = csv.writer(
+                        open(current_out_path, 'w', newline='', encoding=config.csv_encoding))
                     current_out_writer.writerow(headers)
                 current_out_writer.writerow(row)
 
@@ -52,4 +53,3 @@ def __output_file_name_for_split(chunk_file_name: str, chunk: int, output_path='
     :return: joined and template resolved filename.
     """
     return os.path.join(output_path, chunk_file_name % str(chunk).zfill(4))
-

@@ -1,8 +1,6 @@
-import re
-
 from faker import Faker
 
-from pseudonomizer.global_dict import replace_names_in_element, is_company_name, contains_iban, iban_regex
+from pseudonomizer.global_dict import replace_names_in_element, contains_iban, contains_email
 from pseudonomizer.iban.pseudo_iban import IbanPseudonomizer
 from pseudonomizer.pseudonomizer_interface import PseudonomizerInterface
 
@@ -20,4 +18,8 @@ class PurposePseudonomizer(PseudonomizerInterface):
             new_iban = IbanPseudonomizer.pseudonomize(fake, iban)
             element = element.replace(iban, new_iban)
 
-        return replace_names_in_element(element)
+        email = contains_email(element)
+        if email is not None:
+            element = element.replace(email, '__deleted_email__')
+
+        return replace_names_in_element(element, replace_numbers=False)

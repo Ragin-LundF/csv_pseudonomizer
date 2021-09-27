@@ -1,9 +1,11 @@
+import glob
 import mmap
 import os
 
 from tqdm import tqdm
 
 import config
+from model.parameter_dc import Parameter
 
 
 def full_filename(file: str, path='.') -> str:
@@ -38,7 +40,7 @@ def read_file_lines(input_file: str, path='.') -> []:
     return result
 
 
-def save_list_of_lines(output_file: str, data: list[str], mode='w', path='.'):
+def save_list_of_lines(output_file: str, data: list[str], mode='w', path='.') -> None:
     """
     Save list of strings to a file.
 
@@ -58,7 +60,7 @@ def save_list_of_lines(output_file: str, data: list[str], mode='w', path='.'):
     fp.close()
 
 
-def delete_file(file: str, path='.'):
+def delete_file(file: str, path='.') -> None:
     """
     Delete a file.
 
@@ -67,3 +69,23 @@ def delete_file(file: str, path='.'):
     :return: None
     """
     os.remove(full_filename(file, path=path))
+
+
+def file_name_for_processing(params: Parameter) -> []:
+    """
+    Returns a list of files which should be processed.
+    If it is in `processing split files` mode, it tries to detect the files.
+    The single file mode returns the file as a list with one entry.
+
+    :param params: Parameter dataclass which contains the filenames.
+    :return: list of filename(s).
+    """
+    file_list = []
+    if params.is_split_file:
+        file_name_without_ext = os.path.splitext(params.input_file)[0]
+        trailing_template = config.split_file_template_trailing.replace('%s', '*')
+        file_list = glob.glob(file_name_without_ext + trailing_template)
+    else:
+        file_list.append(params.input_file)
+
+    return file_list

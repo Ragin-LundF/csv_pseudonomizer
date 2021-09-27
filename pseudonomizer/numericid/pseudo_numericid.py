@@ -11,6 +11,7 @@ class NumericIdPseudonomizer(PseudonomizerInterface):
     This class pseudomizes numeric ids.
     Numeric IDs are always replaced with same numbers to ensure, that the pattern structure is kept.
     """
+
     @staticmethod
     def pseudonomize(fake: Faker, element: str) -> str:
         replaced_id = get_element(element)

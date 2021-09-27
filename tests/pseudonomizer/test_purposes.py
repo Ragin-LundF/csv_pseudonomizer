@@ -1,4 +1,3 @@
-from pseudonomizer.names.pseudo_names import NamePseudonomizer
 from pseudonomizer.purpose.pseudo_purpose import PurposePseudonomizer
 from tests.test_base import BaseTest
 

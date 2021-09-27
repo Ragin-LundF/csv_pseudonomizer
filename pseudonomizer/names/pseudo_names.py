@@ -10,9 +10,10 @@ class NamePseudonomizer(PseudonomizerInterface):
     Companies are not under GDPR.
     Names are always replaced with same names to ensure, that the pattern structure is kept.
     """
+
     @staticmethod
     def pseudonomize(fake: Faker, element: str) -> str:
         if is_company_name(element):
             return element
         else:
-            return replace_names_in_element(element)
+            return replace_names_in_element(element, replace_numbers=False)

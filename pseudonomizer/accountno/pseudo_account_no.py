@@ -11,6 +11,7 @@ class AccountNoPseudonomizer(PseudonomizerInterface):
     This class pseudomizes the account number.
     Account numbers are always replaced with same numbers to ensure, that the pattern structure is kept.
     """
+
     @staticmethod
     def pseudonomize(fake: Faker, element: str) -> str:
         replaced_account_no = get_element(element)

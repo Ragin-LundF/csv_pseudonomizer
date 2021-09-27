@@ -17,6 +17,7 @@ global_is_company_regexes = []
 name_dictionary = {}
 name_replacer = ReplaceUtils()
 iban_regex = re.compile(r'[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}')
+email_regex = re.compile(r'\S+@\S+\.\S+')
 
 
 def init(path='.'):
@@ -66,15 +67,16 @@ def init(path='.'):
     name_replacer.add_dict(name_dictionary)
 
 
-def replace_names_in_element(element: str) -> str:
+def replace_names_in_element(element: str, replace_numbers=True) -> str:
     """
     Global replace method for names.
     It is more a helper method which uses the ReplacerUtils to replace the names.
 
     :param element: Column, which should be used to replace the name.
+    :param replace_numbers: True if strings with numbers should also be replaced. Default is True.
     :return: Column with replaced name.
     """
-    return name_replacer.replace(element)
+    return name_replacer.replace(element, replace_numbers)
 
 
 def get_element(element: str) -> Union[str, None]:
@@ -114,9 +116,29 @@ def is_company_name(element: str) -> bool:
 
 
 def contains_iban(element: str) -> Optional[str]:
+    """
+    Checks if an IBAN is existing.
+    If yes, it returns the string for replacement.
+
+    :param element:   Element to check
+    :return: IBAN or None
+    """
     iban_srch = iban_regex.search(element)
     if iban_srch is not None:
         return iban_srch.group(0)
+
+
+def contains_email(element: str) -> Optional[str]:
+    """
+    Checks if an e-mail is existing.
+    If yes, it returns the string for replacement.
+
+    :param element:  Element to check
+    :return: E-Mail or None
+    """
+    email_srch = email_regex.search(element)
+    if email_srch is not None:
+        return email_srch.group(0)
 
 
 def save_mapping_data():

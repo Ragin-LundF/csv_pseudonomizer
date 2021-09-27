@@ -74,4 +74,3 @@ def _process_file(params: Parameter) -> None:
 
     if config.save_mapping:
         save_mapping_data()
-

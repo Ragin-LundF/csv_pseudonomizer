@@ -115,4 +115,5 @@ def __add_leading_and_trailing_chars(column_list: []) -> None:
             column_list[0] = f"{config.csv_column_leading_chars_first}{column_list[0]}"
 
         if len(config.csv_column_trailing_chars_end) > 0:
-            column_list[len(column_list)-1] = f"{column_list[len(column_list)-1]}{config.csv_column_trailing_chars_end}"
+            column_list[
+                len(column_list) - 1] = f"{column_list[len(column_list) - 1]}{config.csv_column_trailing_chars_end}"

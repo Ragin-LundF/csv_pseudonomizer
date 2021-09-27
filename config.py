@@ -58,6 +58,14 @@ fake_locale = 'de_DE'
 # -- Save the mapping as parquet file and reuse the existing one
 save_mapping = True
 
+# -- Map only if key mapping starts with the word (True) or parts of the string (False)
+map_only_starting_keyword = True
+
+# -- If the following configuration is not empty, it replaces names with the defined string instead of a fake name
+replace_purpose_names_with = ''  # '__deleted_name__'
+# -- Tag a replaced name
+tag_replaced_name_with = '[rplcd]'
+
 # -- Mapping file names
 mapping_file_name_dict = 'mapping_dict'
 mapping_file_name_names = 'mapping_names'
