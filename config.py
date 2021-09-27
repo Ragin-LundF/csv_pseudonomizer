@@ -67,6 +67,10 @@ map_only_starting_keyword = True
 replace_purpose_names_with = ''  # '__deleted_name__'
 # -- Tag a replaced name
 tag_replaced_name_with = '[rplcd]'
+# -- Tag before replaced word
+tag_replaced_name_before = ''
+# -- Tag after replaced word
+tag_replaced_name_after = ''
 
 # -- Mapping file names
 mapping_file_name_dict = 'mapping_dict'

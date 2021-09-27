@@ -97,8 +97,8 @@ class ReplaceUtils:
         tag_start = ''
         tag_end = ''
         if config.tag_replaced_name_with is not None and len(config.tag_replaced_name_with) > 0:
-            tag_start = f'{config.tag_replaced_name_with}['
-            tag_end = ']'
+            tag_start = f'{config.tag_replaced_name_with}{config.tag_replaced_name_before}'
+            tag_end = f'{config.tag_replaced_name_after}'
         return f'{tag_start}{element}{tag_end}'
 
     def __contains_number(self, element: str) -> bool:
