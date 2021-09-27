@@ -4,6 +4,7 @@ import os
 from tqdm import tqdm
 
 import config
+from utils.csv_utils import CsvSemicolon
 
 
 def split(input_file: str, number_of_chunks: int, output_path='.') -> None:
@@ -17,11 +18,12 @@ def split(input_file: str, number_of_chunks: int, output_path='.') -> None:
     """
     with open(input_file, newline='', encoding=config.csv_encoding) as csv_file_handler:
         chunk_file_name = os.path.splitext(input_file)[0] + config.split_file_template_trailing
-        csv_reader = csv.reader(csv_file_handler, delimiter=config.csv_separator)
+        csv_reader = csv.reader(csv_file_handler, delimiter=config.csv_split_separator)
         current_chunk = 1
         output_file = __output_file_name_for_split(chunk_file_name, current_chunk)
 
-        current_out_writer = csv.writer(open(output_file, 'w', newline='', encoding=config.csv_encoding))
+        current_out_writer = csv.writer(open(output_file, 'w', newline='', encoding=config.csv_encoding),
+                                        dialect=CsvSemicolon)
         current_limit = number_of_chunks
 
         headers = next(csv_reader)
@@ -40,6 +42,7 @@ def split(input_file: str, number_of_chunks: int, output_path='.') -> None:
                         open(current_out_path, 'w', newline='', encoding=config.csv_encoding))
                     current_out_writer.writerow(headers)
                 current_out_writer.writerow(row)
+                progress_bar_out.update(i)
 
 
 def __output_file_name_for_split(chunk_file_name: str, chunk: int, output_path='.') -> str:

@@ -2,6 +2,8 @@
 # -- Separator for the CSV file
 import logging
 
+# -- Separator of the CSV columns for splitting
+csv_split_separator = ';'
 # -- Separator of the CSV columns
 csv_separator = '"";""'
 # -- CSV leading chars for the first column if the data uses not only one separator character
