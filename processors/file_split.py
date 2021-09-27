@@ -1,10 +1,10 @@
-import csv
+import logging
 import os
 
 from tqdm import tqdm
 
 import config
-from utils.csv_utils import CsvSemicolon
+from utils.file_utils import save_list_of_lines
 
 
 def split(input_file: str, number_of_chunks: int, output_path='.') -> None:
@@ -16,33 +16,41 @@ def split(input_file: str, number_of_chunks: int, output_path='.') -> None:
     :param number_of_chunks: Number of chunks (lines).
     :param output_path: Optional output path, if the file should not stored in the main directory.
     """
-    with open(input_file, newline='', encoding=config.csv_encoding) as csv_file_handler:
+    with open(input_file, 'rb') as csv_file_handler:
         chunk_file_name = os.path.splitext(input_file)[0] + config.split_file_template_trailing
-        csv_reader = csv.reader(csv_file_handler, delimiter=config.csv_split_separator)
         current_chunk = 1
         output_file = __output_file_name_for_split(chunk_file_name, current_chunk)
-
-        current_out_writer = csv.writer(open(output_file, 'w', newline='', encoding=config.csv_encoding),
-                                        dialect=CsvSemicolon)
         current_limit = number_of_chunks
 
-        headers = next(csv_reader)
-        current_out_writer.writerow(headers)
+        headers = next(csv_file_handler).decode(config.csv_encoding).strip()
 
-        with tqdm(desc=f"writing {output_file} (lines)") as progress_bar_out:
-            for i, row in enumerate(csv_reader):
+        with tqdm(desc=f"writing split data of {input_file} (lines)") as progress_bar_out:
+            lines = []
+            saved = False
+            for i, row in enumerate(csv_file_handler):
+                lines.append(row.decode(config.csv_encoding).strip())
+
                 if i + 1 > current_limit:
+                    logging.info(f"Save limit file {output_file}")
+                    current_limit = number_of_chunks * (current_chunk + 1)
+                    saved = True
                     current_chunk += 1
-                    current_limit = number_of_chunks * current_chunk
-                    current_out_path = __output_file_name_for_split(
-                        chunk_file_name,
-                        current_chunk
-                    )
-                    current_out_writer = csv.writer(
-                        open(current_out_path, 'w', newline='', encoding=config.csv_encoding))
-                    current_out_writer.writerow(headers)
-                current_out_writer.writerow(row)
+                    __save_chunk(current_chunk, chunk_file_name, lines, headers)
+                    lines = []
                 progress_bar_out.update(i)
+
+            if not saved:
+                logging.info(f"Save file {output_file}")
+                __save_chunk(current_chunk, chunk_file_name, lines, headers)
+
+
+def __save_chunk(current_chunk: int, chunk_file_name: str, lines: [], headers: str):
+    current_out_path = __output_file_name_for_split(
+        chunk_file_name,
+        current_chunk - 1
+    )
+    lines.insert(0, headers)
+    save_list_of_lines(current_out_path, lines)
 
 
 def __output_file_name_for_split(chunk_file_name: str, chunk: int, output_path='.') -> str:
