@@ -59,19 +59,20 @@ class ReplaceUtils:
         """
         self.automaton.make_automaton()
 
-    def replace(self, element: str, replace_numbers=True) -> str:
+    def replace(self, element: str, replace_alphanumeric=True) -> str:
         """
         Replaces a keyword from the previous given dict or added item with the value.
 
         :param element:  The element that contains possible keywords to be replaced.
-        :param replace_numbers: True if strings with numbers should also be replaced. Default is True.
+        :param replace_alphanumeric: True if strings with numbers should also be replaced. Default is True.
         :return: Replaced string
         """
         result = []
         words = element.split(' ')
         for i, word in enumerate(words):
             replaced = False
-            if not replace_numbers and self.__contains_number(word):
+
+            if not replace_alphanumeric and self.__contains_number(word):
                 pass
             else:
                 word_low = word.lower()

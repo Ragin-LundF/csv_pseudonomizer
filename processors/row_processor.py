@@ -41,6 +41,12 @@ def process_row(fake: Faker, row, with_header=False) -> Optional[str]:
 
 
 def __remove_not_required_columns(term: []) -> []:
+    """
+    Removes not required columns from output CSV.
+
+    :param term: current term array to process
+    :return: cleaned up array
+    """
     if len(config.csv_headers_remove_in_target) > 0:
         headers = list(config.csv_headers)
         for col_to_remove in config.csv_headers_remove_in_target:

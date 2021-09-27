@@ -67,16 +67,16 @@ def init(path='.'):
     name_replacer.add_dict(name_dictionary)
 
 
-def replace_names_in_element(element: str, replace_numbers=True) -> str:
+def replace_names_in_element(element: str, replace_alphanumeric=True) -> str:
     """
     Global replace method for names.
     It is more a helper method which uses the ReplacerUtils to replace the names.
 
     :param element: Column, which should be used to replace the name.
-    :param replace_numbers: True if strings with numbers should also be replaced. Default is True.
+    :param replace_alphanumeric: True if strings with numbers should also be replaced. Default is True.
     :return: Column with replaced name.
     """
-    return name_replacer.replace(element, replace_numbers)
+    return name_replacer.replace(element, replace_alphanumeric)
 
 
 def get_element(element: str) -> Union[str, None]:

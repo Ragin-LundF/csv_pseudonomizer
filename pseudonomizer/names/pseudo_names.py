@@ -16,4 +16,4 @@ class NamePseudonomizer(PseudonomizerInterface):
         if is_company_name(element):
             return element
         else:
-            return replace_names_in_element(element, replace_numbers=False)
+            return replace_names_in_element(element, replace_alphanumeric=False)

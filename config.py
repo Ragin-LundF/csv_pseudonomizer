@@ -80,16 +80,6 @@ pseudo = [
         'class': 'NumericIdPseudonomizer'
     },
     {
-        'name': 'counterpartName',
-        'import': 'pseudonomizer.names.pseudo_names',
-        'class': 'NamePseudonomizer'
-    },
-    {
-        'name': 'purpose',
-        'import': 'pseudonomizer.purpose.pseudo_purpose',
-        'class': 'PurposePseudonomizer'
-    },
-    {
         'name': 'IBAN',
         'import': 'pseudonomizer.iban.pseudo_iban',
         'class': 'IbanPseudonomizer'
@@ -108,6 +98,16 @@ pseudo = [
         'name': 'counterpartAccountNumber',
         'import': 'pseudonomizer.accountno.pseudo_account_no',
         'class': 'AccountNoPseudonomizer'
+    },
+    {
+        'name': 'counterpartName',
+        'import': 'pseudonomizer.names.pseudo_names',
+        'class': 'NamePseudonomizer'
+    },
+    {
+        'name': 'purpose',
+        'import': 'pseudonomizer.purpose.pseudo_purpose',
+        'class': 'PurposePseudonomizer'
     }
 ]
 

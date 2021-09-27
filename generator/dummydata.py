@@ -70,7 +70,7 @@ def create_fake_csv_rows(params) -> []:
             'accountNumber': f'{fake.random_int(min=1000000000, max=9999999999)}',
             'IBAN': f'{fake.iban()}',
             'balanceDate': f'{fake.date()}',
-            'accountSeized': 'false'
+            'accountSeized': 'ok'
         })
     return row_list
 
